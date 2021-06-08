@@ -1,0 +1,88 @@
+
+/*
+SPDX-License-Identifier: CC-BY-4.0
+SmartContract para atribuição de nota - Elayne Nascimento 
+*/ 
+pragma solidity 0.8.4;
+
+contract AluguelDeEmpilhadeiras {
+    
+    struct Locadora {
+        string NomeDaEmpresa;
+        string Endereco;
+        uint CNPJ;
+    }
+    
+    uint public valorAluguel;
+    uint constant numeroMaximoParaMulta = 5;
+    
+    struct ProprietarioDasEmpilhadeiras {
+        string NomeDaEmpresa; 
+        string Endereco;
+        uint CNPJ; 
+        bool ativaAluguel; // se o Aluguel está ativo ou já foi fechado
+    }
+    
+    mapping (string => uint) public potenciaEmpilhadeirasEmToneladas;
+    string[] public ordemDeChegadaDasEmpilhadeiras;
+    
+    constructor () {
+        
+        potenciaEmpilhadeirasEmToneladas ["FG30B da Toyota"] = 2;
+        
+        potenciaEmpilhadeirasEmToneladas ["FG18B da Toyota"] = 5; 
+        
+        potenciaEmpilhadeirasEmToneladas ["8FBN30 da Toyota"] = 7;
+        
+        // ETC
+        
+        ordemDeChegadaDasEmpilhadeiras.push("FG30B da Toyota"); // 0
+        ordemDeChegadaDasEmpilhadeiras.push("FG18B da Toyota"); // 1 
+        OrdemDeChegadaDasEmpilhadeiras.push("8FBN30 da Toyota"); // 2
+        // ETC
+    }
+    
+        
+        
+    address payable contaLocadora;
+    
+    uint prazoFinalLocacao = block.timestamp + 864000; 
+    //a locação é padronizada em dez dias
+    
+}
+    event novoAluguel(string Locador);
+    
+    modifier verificaPoderes {
+        require (msg.value <= "Somente Empresas, Pessoas Juridicas com CNPJ Podem Alugar Empilhadeiras");
+        
+        _;
+    }
+    
+    
+    function incluirEmpilhadeiras(string memory _novaEmpilhadeira) public { 
+        OrdemDeChegadaDasEmpilhadeiras.push(_novasEmpilhadeiras);
+        
+    }
+    
+    function consultarOrdemDeChegadaDasEmpilhadeiras (uint _ordemChegadaEmpilhadeiras) public view returns (string memory) {
+        return OrdemDeChegadaDasEmpilhadeiras[_ordemChegadaEmpilhadeiras];
+        
+    }
+    
+    function atribuirPotenciaAtualdasEmpilhadeiras (string memory _Empilhadeiras, uint _novaPotencia) public {
+        potenciaEmpilhadeirasEmToneladas[_Empilhadeiras] = _novaPotencia;
+    }
+    
+    function consultarPotenciaAtualDasEmpilhadeiras (string memory_Empilhadeira) public view returns (uint){
+        return potenciaEmpilhadeirasEmToneladas[_Empilhadeiras];
+        
+    }
+        function consultaTerminoLocacao() public payable verificaPoderes { 
+            require(block.timestamp >= prazoFinalLocacao, "Locacao em andamento.");
+            
+            require (block.timestamp <= prazoFinalLocacao, "Locacao Encerrada. Devolva a Empilhadeira.");
+            
+            ContaLocadora.transfer(address(this).balance);
+        }
+        
+    }
